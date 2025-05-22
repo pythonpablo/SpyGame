@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta charset="utf-8">
+    <title>Spy Game</title>
+    <!-- Set the viewport (i.e. visible area of a Webpage)  to control the page's dimensions and scaling:
+            - width=device-width sets the width of the page to follow the screen-width of the device (which will vary depending on the device).
+            - initial-scale=1.0 sets the initial zoom level when the page is first loaded by the browser.
+    -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Serve up Google's Roboto font which is versatile and widely used, especially in Android apps.  It'll be used for button labels on this Webpage. -->
+    <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+
+        
+    <!-- Use the  ‘Nexa’ font which was chosen for the Bolt Logo & Design.  Ref.:
+            https://medium.com/bolt-iot/bolt-has-a-new-look-ef81ba815bce
+    -->
+    <link href="https://fonts.cdnfonts.com/css/nexa-script" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/nexa-bold" rel="stylesheet">
+    
+    
+    <!-- Favicons, and HTML and XML to use them. -->
+    <!-- Generics -->
+    <link rel="icon" href="images/favicons/favicon_32.jpeg" sizes="32x32">
+    <link rel="icon" href="images/favicons/favicon_57.jpeg" sizes="57x57">
+    <link rel="icon" href="images/favicons/favicon_76.jpeg" sizes="76x76">
+    <link rel="icon" href="images/favicons/favicon_96.jpeg" sizes="96x96">
+    <link rel="icon" href="images/favicons/favicon_128.jpeg" sizes="128x128">
+    <link rel="icon" href="images/favicons/favicon_192.jpeg" sizes="192x192">
+    <link rel="icon" href="images/favicons/favicon_228.jpeg" sizes="228x228">
+    
+    <!-- Android -->
+    <link rel="shortcut icon" href="images/favicons/favicon_196.jpeg" sizes="196x196">
+    
+    
+    <!-- iOS -->
+    <link rel="apple-touch-icon" href="images/favicons/favicon_120.jpeg" sizes="120x120">
+    <link rel="apple-touch-icon" href="images/favicons/favicon_152.jpeg" sizes="152x152">
+    <link rel="apple-touch-icon" href="images/favicons/favicon_180.jpeg" sizes="180x180">
+    
+    <!-- Windows 8 IE 10-->
+    <meta name="msapplication-TileColor" content="#1F1F1D">
+    <meta name="msapplication-TileImage" content="images/favicons/favicon_144.jpeg">
+    
+    <!-- Windows 8.1 + IE11 and above -->
+    <meta name="msapplication-config" content="/images/xml/browserconfig.xml" />
+            
+    <link rel="stylesheet" href="css/Spy_Game.css">
+    
+</head>
+
+<body>
+    
+    <div class="body_Container">
+    <!-- Webpage header container. -->
+    <header>
+        <h1>Spy Game</h1>
+    
+        <!-- eyeSpy Image. -->
+        <div class="eyeSpy_Image_Container">
+            <img alt="" src="images/eyeSpy.png" id="img_eyeSpy" /> 
+        </div>
+    </header>
+    
+    <!-- Webpage main body container. -->
+    <main>
+        <div class="player_Names_Container" id="setup">
+            <!-- First user interaction: Prompt. > Game coordinator enters player names. > User clicks "Start Game" button. -->
+            <h2 class=direction>Enter player names, separated by commas and press the 'Submit Player Names' button.</h2>
+            
+            <!--
+             Add a form with an input field, in a container to prompt the user to enter the names of the players.  Add the following
+              parameters to the "input" HTML tag:
+                    type="text"         : The default value for type.  A single-line text field.  Line-breaks are automatically
+                                           removed from the input value.
+                    autocomplete="on"   : To recall previous values entered in the same input field.
+             On submission of this form by clicking its "Submit Player Names" button, the associated EventListener invokes the launchGame()
+              function.
+             Note that the autocomplete="on" parameter only works if the input field and button are enclosed in <form></form> tags, and  
+              additionally, the button must be defined via a <button type="submit"...> as distinct from an <input type="submit"...>.
+            -->            
+            <!-- <form id="myForm"  method="post" autocomplete="on"  onclick="launchGame();">-->
+            <form>
+                <input type="text" id="players" name="players" placeholder="Alice, Bob, Charlie" autocomplete="on" />
+            
+                <div id="errorMessage" class="error-message"></div>
+          
+                <!-- <button id="submitPlayers_btn">Submit Player Names</button>-->
+                <!-- <input type="submit" value="Submit Player Names" id="submitPlayers_btn"/>-->
+                <!-- <input type="button" id="submitPlayers_btn" name="submitPlayers_btn"  value="Submit Player Names" />-->
+                <button type="submit" id="submitPlayers_btn" name="submitPlayers_btn">Submit Player Names</button>
+            </form>
+        </div>
+        <!-- </form>
+        
+        <!-- Second user interaction: Prompt. > Users click their "Name" buttons to discover their roles. > "Reveal Spy" button is clicked when game is over. -->
+        <div id="discover_Roles_or_Reveal_Spy_Container">
+            <h2 class=direction>Click the button with your name on it to discover your role.</h2>
+            <div id="player-list"></div>
+            <button id="revealSpy_btn">Reveal Spy</button>
+        </div>
+    
+        <!-- Third user interaction: "Game Over!" is declared. > Spy is revealed. > "Play Again" button is clicked to play another game. -->
+        <div id="spy_Revealed_and_Play_Again_Container">
+            <h2 class=direction>Game Over!</h2>
+            <p id="spy_Info"></p>
+            <button id="playAgain_btn" onclick="window.location.reload();">Play Again</button>    <!-- Reload this Webpage. -->
+        </div>
+    </main>
+    
+    <!-- Webpage footer container. -->
+    <footer>
+        <div class="footer_made_with">
+            <p class="love">Crafted with ❤️ by Pablo.</p>
+        </div>
+    </footer>
+    
+    </div>
+
+    <!--
+     Imbed locations_file.json, which strictly speaking is not a JSON file as it contains:
+            locations =
+     rather than:
+            "locations":
+     This change was made to avoid the following error:
+            "Uncaught SyntaxError: Unexpected token ':'" in locations_file.json:2
+    -->
+    <script type="text/javascript" src="JS/locations_file.json"></script>
+    
+    <!-- 
+     Use type="module" for JavaScript file, to allow the latter to use the import statement to read the external JSON file.  Ref.:
+        https://www.tutorialspoint.com/how-to-read-an-external-json-file-in-javascript
+        https://stackoverflow.com/questions/67734739/import-a-local-json-using-javascript
+    -->
+    <script type="text/javascript">
+    // <script type="module">
+        
+        /*
+         Wrapping this script in a document.addEventListener("DOMContentLoaded", function () {}) ensures that the
+          the launchGame() function exists (viz. has been loaded) before the Submit Player Names button is clicked.
+        */
+        document.addEventListener("DOMContentLoaded", function () {
+            
+
+
+          //let players = [];
+          let spy = "";
+          let location = "";
+          //let locations = ["Beach", "Bank", "Supermarket", "Hospital", "Restaurant", "Airport"];
+          
+          /*
+           The following fetch() statements which I tried to use to fetch the locations_file.json (in its correct JSO format, i.e. with "locations":)
+            throws the following error:
+                Access to fetch at 'locations_file.json' from origin 'null' has been blocked by CORS policy: Cross origin requests are only
+                supported for protocol schemes: chrome-extension, chrome-untrusted, data, edge, http, https, isolated-app.
+           This is why I instead opted to imbed locations_file.json afterchanging its "locations": to locations =, and to comment out these fetch()
+           statements.
+          */
+          /*
+          fetch("JS/locations_file.json")
+            .then(response => response.json()) // Parse JSON
+            .then(data => console.log(data)) // Work with JSON data
+            .catch(error => console.error('Error fetching JSON:', error));
+          
+          fetch("JS/locations_file.json")
+                .then(response => response.json())
+                .then(data =>
+                      {let length = data.locations.length;}
+                );
+          */
+          
+          /*
+           Diagnostic code to practice looping through and referencing items in the above locations JSON array.  This diagnostic code should be
+            commented out in Production code.
+          */
+          locations.forEach((location) => {
+            console.log('location name: ' + location.name);                             
+          });
+          console.log("locations length:", locations.length);
+          let key = 1;
+          console.log("Second location name:", locations[key].name);
+
+          /*
+           The following statement reesulted in the error: "Uncaught SyntaxError: Cannot use import statement outside a module".
+            import data from "JS/data.json" assert { type: "json" };
+            console.log(data);
+          */
+            function showModal(role_Message) {
+                /* Dynamically generate a <div></div> HTML element for the modal and assign it a class of "modal". */
+                const modal = document.createElement("div");
+                modal.classList.add("modal");
+                
+                /*
+                 Split the role_Message message passed to this showModal() function into two parts based on punctuation marks, so we can
+                  spread it across two paragraphs in the modal.
+                */
+                let split = [];
+                let role_Message_Part_01 = "";
+                let role_Message_Part_02 = "";
+                if (role_Message.substring(0,3) == "You") {
+                    //  You are the SPY! Try to figure out the location
+                    split = role_Message.split("!");
+                    console.log("split:", split);                       // Debugging log.
+                    index_Of_ExclamationMark = role_Message.indexOf("!");
+                    role_Message_Part_01 = role_Message.slice(0, index_Of_ExclamationMark+1);
+                    role_Message_Part_02 = split[1].trim();
+                } else {
+                    //  The location is: Restaurant. Go find the spy!
+                    split = role_Message.split(".");
+                    console.log("split:", split);                       // Debugging log.
+                    index_Of_ExclamationMark = role_Message.indexOf(".");
+                    role_Message_Part_01 = role_Message.slice(0, index_Of_ExclamationMark+1);
+                    role_Message_Part_02 = split[1].trim();
+                   
+                }
+                console.log("role_Message_Part_01:", role_Message_Part_01);                 // Debugging log.
+                console.log("role_Message_Part_02:", role_Message_Part_02);                 // Debugging log.
+              
+                /*
+                 Dynamically generate two <p></p> HTML elements to accommodate the text of parts 01 and 02 of the the modal role message
+                  (viz. role_Message) that was passed to this showModal() function, and append them to the above <div></div> HTML modal
+                  element.
+                */
+                const your_Role_Message_Part_01 = document.createElement("p");
+                your_Role_Message_Part_01.classList.add("role_Message_Part_01");
+                your_Role_Message_Part_01.textContent = role_Message_Part_01;
+                modal.appendChild(your_Role_Message_Part_01);
+                
+                const your_Role_Message_Part_02 = document.createElement("p");
+                your_Role_Message_Part_02.classList.add("role_Message_Part_02");
+                your_Role_Message_Part_02.textContent = role_Message_Part_02;
+                modal.appendChild(your_Role_Message_Part_02);
+                
+                /*
+                 Dynamically generate a <p></p> HTML element to accommodate a direction message to players that they should click the 'Close'
+                  button before passing on to next player.  Assign this direction message a class of "direction" before appending it to the above
+                  <div></div> HTML modal element.
+                */
+                const direction_Message = document.createElement("p");
+                direction_Message.classList.add("direction");
+                direction_Message.textContent = "Click the following 'Close' button before passing on to the next player.";
+                modal.appendChild(direction_Message);
+              
+                /*
+                 Dynamically generate a <button></button> HTML element with a label of "Close" to accommodate and assign it an ID of 
+                  "modal_closeButton".
+                 Add an Event Listener for this "Close" button, to remove both the modal and the overlay if it is clicked.
+                 Append this HTML button element as a child of above <div></div> HTML modal element.
+                */
+                const closeButton = document.createElement("button");
+                closeButton.id = "modal_closeButton";
+                closeButton.textContent = "Close";
+              
+                closeButton.addEventListener("click", () => {
+                  document.body.removeChild(modal);
+                  //remove the overlay, if it exists.
+                  const overlay = document.getElementById("modal_Overlay");
+                  if(overlay){
+                    document.body.removeChild(overlay);
+                  }
+                });
+              
+                modal.appendChild(closeButton);
+              
+                /*
+                 Dynamically generate a <div></div> HTML element which will be styled to produce a semi-transparent black overlay effect 
+                  that will sit beneath the madal but above all other content.
+                 Add this <div></div> HTML element  the modal message, and assign it an ID of "modal_closeButton".
+                 Add an Event Listener for this "Close before passing to next player" button, to remove both the modal and the overlay if it
+                  is clicked.
+                 Append this HTML overlay element as a child of this HTML page's <body></body> HTML element.
+                 Append this HTML modal element as a child of this HTML page's <body></body> HTML element.
+                */
+                const overlay = document.createElement("div");
+                overlay.id = "modal_Overlay";
+              
+                // Append modal and overlay to the body
+                document.body.appendChild(overlay);
+                document.body.appendChild(modal);
+              
+            }  
+      
+            function launchGame() {
+                event.preventDefault();                                  // Prevent page reload.
+                console.log(">>> Readying game!");                       // Debugging log.
+                /*
+                 Retrieve string of comma-separated players entered, into a comma-separated array, removing any
+                  leading or trailing spaces.
+                */
+                //let inputValue = document.getElementById("myInput").value.trim();
+                  
+                let players = document.getElementById("players").value.split(',').map(p => p.trim());
+                console.log("players array: ", players);            // Debugging log.
+        
+                /* Verify that at least three player names were submitted.  If not, outout error message. */
+                if (players.length < 3) {
+                    let errorMessageElement = document.getElementById("errorMessage");
+                    /*alert("At least 3 players required!");*/
+                    let nameError = "Please enter names for at least three players.";
+                    /*document.getElementById("playerNames_error").innerHTML = nameError;*/
+                    errorMessageElement.textContent = nameError;
+                    //addError("Input field cannot be empty");
+                    //showError();
+                    //submit = false;
+                    return;
+                }
+                
+                /*
+                 Randomly select a spy from the players array.
+                 The Math.random() static method returns a floating-point, pseudo-random number that's greater than
+                  or equal to 0 and less than 1.
+                 The Math.floor() static method always rounds down and returns the largest integer less than or
+                  equal to a given number.
+                 So the following statement for 3 players (viz. players.length = 3), will return an index to the players array of either 0, 1 or 2.
+                */
+                spy = players[Math.floor(Math.random() * players.length)];
+                console.log("Spy: ", spy);                          // Debugging log to check for randomness.
+                
+                /*
+                 Randomly select a location from the locations array.
+                 So the following statement for n players (viz. locations.length = n), will return an index to the players array between 0 and locations.length-1.
+                */
+                //location = locations[Math.floor(Math.random() * locations.length)];
+                location = locations[Math.floor(Math.random() * locations.length)].name;
+                console.log("Location: ", location);                // Debugging log.
+        
+                document.getElementById("setup").style.display = "none";
+                document.getElementById("discover_Roles_or_Reveal_Spy_Container").style.display = "block";
+        
+                let playerListDiv = document.getElementById("player-list");
+                playerListDiv.innerHTML = "";
+        
+                /*
+                 For each element (or player) in the players array:
+                    1. Generate a button for it.
+                    2. Label the button with the player name.
+                    3. Assign the button a class name of "playerRole_btn".
+                    4. Get the clicking of the button to trigger an onclick event that will call the function below
+                        to launch an alert / modal.
+                    5. Append the button element to the playerListDiv HTML element.
+                */
+                players.forEach(player => {
+                    let button = document.createElement("button");
+                    /* Use the innerText property to change the inner text of the current HTML button element. */
+                    button.innerText = player;
+                    button.className = "playerRole_btn";
+                    
+                    console.log(">>> Game is ready for playing!");                       // Debugging log.
+                    
+                    /* button.onclick = function() {
+                        alert(player === spy ? "You are the SPY! Try to figure out the location." 
+                                             : `The location is: ${location}. Find the spy!`);
+                        this.disabled = true;
+                    };*/
+                    /*
+                     Note that for the "The location is: ..." message, the ${location} variable won't render if this is enclosed
+                     in regular quotes (viz "" or '') rather than ``.
+                    */
+                    button.onclick = function() {
+                        showModal(player === spy ? "You are the SPY!  Try to figure out the location."
+                                                 : `The location is: ${location}.  Go find the spy!`);
+                        this.disabled = true;
+                    };
+                    playerListDiv.appendChild(button);
+                });
+            }
+            
+           
+            /*
+              This showRevealButton() function which is called from the second Event Listener below when the Reveal Spy button is clicked,
+               hides the discover_Roles_or_Reveal_Spy_Container, and displays the spy_Revealed_and_Play_Again_Container to reveal the name of
+               the spy.
+            */
+            function showRevealButton() {
+                console.log(">>> Game over as the Spy has been revealed!");                       // Debugging log.
+                document.getElementById("discover_Roles_or_Reveal_Spy_Container").style.display = "none";
+                document.getElementById("spy_Info").innerText = `${spy} was the spy!`;
+                document.getElementById("spy_Revealed_and_Play_Again_Container").style.display = "block";
+            }
+              
+            /*
+              These Event Listeners replaced previous onclick="startGame(); and onclick="showRevealButton(); calls in
+               the associated <button></button> tags.
+            */
+            document.getElementById("submitPlayers_btn").addEventListener("click", launchGame);
+            document.getElementById("revealSpy_btn").addEventListener("click", showRevealButton);
+          
+          
+        });
+        
+    </script>
+    
+</body>
+
+</html>
