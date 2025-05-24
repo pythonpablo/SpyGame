@@ -11,7 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <!-- Serve up Google's Roboto font which is versatile and widely used, especially in Android apps.  It'll be used for button labels on this Webpage. -->
-    <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
 
         
     <!-- Use the  ‘Nexa’ font which was chosen for the Bolt Logo & Design.  Ref.:
@@ -60,7 +60,8 @@
     
         <!-- eyeSpy Image. -->
         <div class="eyeSpy_Image_Container">
-            <img alt="" src="images/eyeSpy.png" id="img_eyeSpy" /> 
+            <img alt="" src="images/eyeSpy+.png" id="img_eyeSpy" /> 
+            <!-- <img alt="" src="images/MyOctopus.png" id="img_eyeSpy" />-->
         </div>
     </header>
     
@@ -127,7 +128,7 @@
      This change was made to avoid the following error:
             "Uncaught SyntaxError: Unexpected token ':'" in locations_file.json:2
     -->
-    <script type="text/javascript" src="JS/locations_file.json"></script>
+    <script type="text/javascript" src="js/locations_file.json"></script>
     
     <!-- 
      Use type="module" for JavaScript file, to allow the latter to use the import statement to read the external JSON file.  Ref.:
@@ -151,7 +152,7 @@
           //let locations = ["Beach", "Bank", "Supermarket", "Hospital", "Restaurant", "Airport"];
           
           /*
-           The following fetch() statements which I tried to use to fetch the locations_file.json (in its correct JSO format, i.e. with "locations":)
+           The following fetch() statements which I tried to use to fetch the locations_file.json (in its correct JSON format, i.e. with "locations":)
             throws the following error:
                 Access to fetch at 'locations_file.json' from origin 'null' has been blocked by CORS policy: Cross origin requests are only
                 supported for protocol schemes: chrome-extension, chrome-untrusted, data, edge, http, https, isolated-app.
@@ -159,12 +160,12 @@
            statements.
           */
           /*
-          fetch("JS/locations_file.json")
+          fetch("js/locations_file.json")
             .then(response => response.json()) // Parse JSON
             .then(data => console.log(data)) // Work with JSON data
             .catch(error => console.error('Error fetching JSON:', error));
           
-          fetch("JS/locations_file.json")
+          fetch("js/locations_file.json")
                 .then(response => response.json())
                 .then(data =>
                       {let length = data.locations.length;}
@@ -184,7 +185,7 @@
 
           /*
            The following statement reesulted in the error: "Uncaught SyntaxError: Cannot use import statement outside a module".
-            import data from "JS/data.json" assert { type: "json" };
+            import data from "js/data.json" assert { type: "json" };
             console.log(data);
           */
             function showModal(role_Message) {
@@ -386,6 +387,7 @@
             */
             document.getElementById("submitPlayers_btn").addEventListener("click", launchGame);
             document.getElementById("revealSpy_btn").addEventListener("click", showRevealButton);
+          
           
           
         });
