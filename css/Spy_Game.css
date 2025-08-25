@@ -10,8 +10,9 @@
     --wp_Reveal_Spy_Button:   #F98125;      /* A strong Pumpkin orange for this "Game Over" button, from a separate Fab Mood Blue + Orange palette. */
 
     /* Set up Colour Palette for Modals. */
-    --mod_Background:         #B2FFF4;      /* A light Columbia Blue,for modal backgrounds. */
-    --mod_Reveal_Text:        #C3363B;      /* A strong Mahogany red in the modal, that reveals a players role and in the case of players other than the Spy, the location. */
+    --mod_Background:         #C9E473;      /* A light olive green,for modal backgrounds. */
+    --mod_Reveal_Text:        #D9403A;      /* A vibrant and rich red in the modal, that reveals a players mission. */
+    --mod_Location_Event:     #CB2D4E;      /* A muted, deep red red in the modal, that in the case of players other than the Spy, reveals the location / event. */
 }
 
 /*
@@ -41,23 +42,31 @@ h1 {
     color: var(--com_Direction_Text);
 }
 
-/* Style the font for the user role reveal message (which is split across two paragraphs) to a bold red.  Remove the bottom margin from
-    the first user role reveal message and the top margin from the second user role reveal message, so that these paragraphs appear as
-    two successive lines rather than the two paragraphs they are.
+/* Style the font for the user role reveal message (which is split across two / three paragraphs) to a bold red.  Remove the top margins 
+    from .role_Message_Spy_Part_02, .role_Message_nonSpy_Part_03 and .role_Message_nonSpy_Part_02, so that these paragraphs appear as
+    two / three successive lines.
 */ 
       
-.role_Message_Part_01 {
+.role_Message_Spy_Part_01, .role_Message_nonSpy_Part_01 {   /* You are the SPY! / The location / event is: */
     font-weight: bold;
     font-size: 1.2em;               /* Set font size to twice the current font size.  The default text size in Web browsers is 16px. */
     color: var(--mod_Reveal_Text);
-    margin-bottom: 0px;
+    margin-bottom: 0px; 
 }
 
-.role_Message_Part_02 {
+.role_Message_Spy_Part_02, .role_Message_nonSpy_Part_03 {   /* Player Mission: Go find the spy! / Try to figure out the location / event. */
     font-weight: bold;
     font-size: 1.2em;               /* Set font size to twice the current font size.  The default text size in Web browsers is 16px. */
     color: var(--mod_Reveal_Text);
-    margin-top: 0px;
+    /*margin-top: 0px;*/
+}
+
+
+.role_Message_nonSpy_Part_02 {                              /* Location / Event. */
+    font-weight: bold;
+    font-size: 1.4em;               /* Set font size to twice the current font size.  The default text size in Web browsers is 16px. */
+    color: var(--mod_Location_Event);
+    /*margin-top: 0px;*/
 }
 
 /* Style the font for revealing the Spy to a bold black. */   
