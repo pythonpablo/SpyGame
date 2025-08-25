@@ -1,0 +1,261 @@
+/* Set up colours in the root pseudo-class so that they're globally accessible. Colour names taken from DoplyColors: https://colors.dopely.top/*/
+:root {
+    /* Set up Colour Palette for common Web Page and Modal elements. Use iColorpalette 411643 for the most part.*/
+    --com_Direction_Text:     #3F7638;      /* A darkish Green House for direction text. */
+    --com_Play_Buttons:       #36C378;      /* A brighter Medium Sea Green for non-revealing buttons, that direction text prompts you to press. */
+   
+    /* Set up Web Page Colour Palette. */
+    --wp_Background:          #BBECD2;      /* A light Water Leaf green,for Web Page background. */
+    --wp_Name_Buttons:        #0999EC;      /* A darkish Dodger Blue for revealing name buttons, for discovering roles. */
+    --wp_Reveal_Spy_Button:   #F98125;      /* A strong Pumpkin orange for this "Game Over" button, from a separate Fab Mood Blue + Orange palette. */
+
+    /* Set up Colour Palette for Modals. */
+    --mod_Background:         #C9E473;      /* A light olive green,for modal backgrounds. */
+    --mod_Reveal_Text:        #D9403A;      /* A vibrant and rich red in the modal, that reveals a players mission. */
+    --mod_Location_Event:     #CB2D4E;      /* A muted, deep red red in the modal, that in the case of players other than the Spy, reveals the location / event. */
+}
+
+/*
+   For information on the different types of selectors (viz. uniColumbia Blueversal (*), type (e.g. body, div, h1, etc.), class (prefixed with a period) and
+    ID (prefixed with a hash)) and how to combine them, see.
+        https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_selectors/Selectors_and_combinators
+*/
+
+/* Select body font, center all body elements and specify margin size. */
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 6px;                    /* Set body margin which surrounds the entire page, so that it's small enough that the footer is visible without needing to scroll down. */
+}
+
+/* Viewport is the browser window size.  Style the "Spy Game" header font to be 10% of viewport width. If the viewport is 50cm wide, 1vw is 5cm. */
+h1 {
+    font-size: 3.8vw;               /* Set font size to be 3.8% of viewport width.  If set to 4.8vw, it pushes down the footer when the discover_Roles_or_Reveal_Spy_Container is made visible. */
+    /*font-size: 3.6em;               /* Set font size to be six times the current font size, which looks huge on smaller form factors. */
+}
+ 
+/* Style the font for user directions (or instructions) to a bold darkish green.  Position this styling here, so that it's not
+    superceded by default h2 styling. */   
+.direction {
+    font-weight: bold;
+    font-size: 1.2em;               /* Set font size to twice the current font size.  The default text size in Web browsers is 16px. */
+    color: var(--com_Direction_Text);
+}
+
+/* Style the font for the user role reveal message (which is split across two / three paragraphs) to a bold red.  Remove the top margins 
+    from .role_Message_Spy_Part_02, .role_Message_nonSpy_Part_03 and .role_Message_nonSpy_Part_02, so that these paragraphs appear as
+    two / three successive lines.
+*/ 
+      
+.role_Message_Spy_Part_01, .role_Message_nonSpy_Part_01 {   /* You are the SPY! / The location / event is: */
+    font-weight: bold;
+    font-size: 1.2em;               /* Set font size to twice the current font size.  The default text size in Web browsers is 16px. */
+    color: var(--mod_Reveal_Text);
+    margin-bottom: 0px; 
+}
+
+.role_Message_Spy_Part_02, .role_Message_nonSpy_Part_03 {   /* Player Mission: Go find the spy! / Try to figure out the location / event. */
+    font-weight: bold;
+    font-size: 1.2em;               /* Set font size to twice the current font size.  The default text size in Web browsers is 16px. */
+    color: var(--mod_Reveal_Text);
+    /*margin-top: 0px;*/
+}
+
+
+.role_Message_nonSpy_Part_02 {                              /* Location / Event. */
+    font-weight: bold;
+    font-size: 1.4em;               /* Set font size to twice the current font size.  The default text size in Web browsers is 16px. */
+    color: var(--mod_Location_Event);
+    /*margin-top: 0px;*/
+}
+
+/* Style the font for revealing the Spy to a bold black. */   
+#spy_Info {
+    font-weight: bold;
+    font-size: 1.2em;               /* Set font size to twice the current font size.  The default text size in Web browsers is 16px. */
+}
+
+
+.body_Container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/*
+   Style the Webpage header, main body and footer containers so that they all operate within their own designated height space,
+    the footer sticks ta the bottom and I need onlt specify a height for the footer and header. 
+   Ref.: https://stackoverflow.com/questions/643879/css-to-make-html-page-footer-stay-at-bottom-of-the-page-with-a-minimum-height-b
+*/
+header, main, footer {
+    margin: 0;
+    display: block;
+}
+
+/* Style the Webpage header with its heading and eyeSpy Image. */ 
+header {
+    height: 40%;
+    /*height: 540px;*/
+    /*background-color: #ccc;*/             /* Set a unique background-color for testing only. */
+    background-color: var(--wp_Background);
+}
+
+/* Style the main body with three user interactions, only one of which is visible at a time. */ 
+main {
+    flex: 1;
+    /* background-color: #f4f4f4;*/         /* Set a unique background-color for testing only. */
+    background-color: var(--wp_Background);
+}
+
+/* Style the Webpage footer with its "Crafted with ❤️ by Pablo." text. */ 
+footer {
+    /* height: 40%;*/
+    /* background-color: orange;*/          /* Set a unique background-color for testing only. */
+    background-color: var(--wp_Background);
+}
+
+
+/* Style the eyeSpy Image to be responsive and scale down if it has to, but never scale up to be larger than its original size, by setting its max-width property to 100%. */
+#img_eyeSpy {
+    max-width: 62%;
+}
+
+/* Style the Second and Third user interaction containers to be invisible at the start of the game. */        
+#discover_Roles_or_Reveal_Spy_Container, #spy_Revealed_and_Play_Again_Container {
+    display: none;
+}
+
+/* Style the error message that's displayed, when the 'Submit Player Names' input "button is clicked but no players were entered. */ 
+.error-message {
+    color: red;                     /* Set error message colour to red. */
+    font-style: italic;             /* Italicise error message font. */
+    font-size: 0.9em;               /* Set font size to just under the current font size (of 16px in Web browsers). */
+    min-height: 1.2em;              /* Adjust height as needed, to provision sufficient space for a conditional error message.*/
+}
+  
+/* Set a default style for buttons to add padding and margins around them and for the cursor to be a pointer. */
+button {
+    height: 46px;                   /* Set a default height for buttons. */
+    padding: 10px;                  /* Add padding within each button around its text label. */
+    margin: 10px;                   /* Add a 10px margin around each button, so that they're no all compacted together. */
+    border: 1px Gray;               /* Add a 1-pixel Gray border to each button. */
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.6em;               /* Set font size to just under the current font size (of 16px in Web browsers). */
+    border-radius: 4px;             /* Set a default border-radius property to add rounded corners to buttons. */
+    
+    /* Set a subtle default right and bottom margin box-shadow for all buttons.  Ref.: https://getcssscan.com/css-box-shadow-examples*/
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    cursor: pointer;                /* Change cursor from an arrow-head to a pointing hand, when hovering over a button. */
+             
+    /* Set the default colours for all buttons, so that the Player name buttons will inherit this colouring.  All other 
+     * buttons will override these default colours with their own.  */
+    background-color: var(--wp_Name_Buttons);   /* Set the default background colour of buttons to DodgerBlue. */
+    color: white;                   /* Set the default font colour of buttons to white. */
+}
+
+/* Style the 'Submit Player Names' button. */
+#submitPlayers_btn {
+    height: 46px;                   /* Set height for this input "button" the same as other buttons. */
+    padding: 10px;                  /* Add padding within this input "button" around its text label. */
+    margin: 0px;                    /* Overlay default 10px button margin around this button, so that it's flush up against error-message. */
+    border-radius: 4px;             /* Set a default border-radius property to add rounded corners to buttons. */
+    border: 1px Gray;               /* Add a 1-pixel Gray border to this input "button". */
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.6em;               /* Set font size to just under the current font size (of 16px in Web browsers). */
+    color: white;                   /* Set the font colour of this input "button" to white. */
+    /* Set a subtle right and bottom margin box-shadow for this input "button". */
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    background-color: var(--com_Play_Buttons);      /* Set the background colour of this input "button" to green. */
+}
+
+/* Style the modal. */ 
+.modal {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-Index: 1000;                             /* Ensure it's on top.*/
+    width: 100%;                               /* Setting the modal to width: 100% and max-width: 60%, will make for a wided modal that won't become too wide....*/
+    max-width: 60%;                            /* ...Without the max-width, it'll go to a 100% width.  Without the width, it'll go about 50%.*/
+    /* width: 100%;*/
+    /* height: 100%;*/
+    background-color: var(--mod_Background);;
+    /* opacity: 0;*/
+    /* visibility: hidden;*/
+    transform: translate(-50%, -50%);
+    /* transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;*/
+}
+
+/* Style the modal content, i.e. the message that will be displayed within the modal. */ 
+.modal_Content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 1rem 1.5rem;
+    width: 24rem;
+    border-radius: 0.5rem;
+}
+
+/* Style the modal "Close" button. */ 
+#modal_closeButton {
+    margin-top: 10px;
+    padding: 8px 12px;
+    background-color: var(--com_Play_Buttons);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* Style the modal overlay. */ 
+#modal_Overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);    /* Semi-transparent black.*/
+    z-Index: 999;                            /* Below the modal, but above other content.*/
+}
+
+
+/* Style the Player name buttons.  No need as theese buttons inherit the default button settings. */ 
+#player-list {
+}
+  
+/* Style the Player name buttons after they've been clicked (and therefore disabled). */
+.playerRole_btn[disabled] {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+
+/* Style the 'Play Again' button to be green. */
+#playAgain_btn {
+    background-color: var(--com_Play_Buttons);      /* Set the background colour of this input "button" to green. */
+    color: white;                   /* Set the font colour of this input "button" to white. */
+}
+ 
+
+/* Style the 'Player name buttons, the only ones that are disabled when clicked by the JavaScript below, to add transparency
+ to the button (to give a "disabled" look) and to display a "no parking sign" when you mouse over the button. */ 
+#revealSpy_btn {
+    background-color: var(--wp_Reveal_Spy_Button);       /* Set the background colour of this button to Violet. */
+    /* color: white;                 /* Set the font colour of this button to white. */
+}
+
+/* Style the "Crafted with..."vfooter. */
+/* Ref.: https://blog.hubspot.com/website/center-text-in-csshttps://blog.hubspot.com/website/center-text-in-css */
+.footer_made_with p {
+    display: flex;
+    justify-content: center;      /* Horizontally align. */ 
+    align-items: center;          /* Vertically align. */
+    height: -15%;
+    bottom: 25px;
+    color: gray;
+}

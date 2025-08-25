@@ -121,7 +121,7 @@
     </div>
 
     <!--
-     Imbed locations_file.json, which strictly speaking is not a JSON file as it contains:
+     Imbed locations_file.json (of locations / events for the Spy to discover), which strictly speaking is not a JSON file as it contains:
             locations =
      rather than:
             "locations":
@@ -198,42 +198,78 @@
                   spread it across two paragraphs in the modal.
                 */
                 let split = [];
-                let role_Message_Part_01 = "";
-                let role_Message_Part_02 = "";
+
                 if (role_Message.substring(0,3) == "You") {
-                    //  You are the SPY! Try to figure out the location
+                    //  You are the SPY! Try to figure out the location / event. 
+                    let role_Message_Spy_Part_01 = "";
+                    let role_Message_Spy_Part_02 = "";
+                    
                     split = role_Message.split("!");
                     console.log("split:", split);                       // Debugging log.
                     index_Of_ExclamationMark = role_Message.indexOf("!");
-                    role_Message_Part_01 = role_Message.slice(0, index_Of_ExclamationMark+1);
-                    role_Message_Part_02 = split[1].trim();
+                    role_Message_Spy_Part_01 = role_Message.slice(0, index_Of_ExclamationMark+1);
+                    role_Message_Spy_Part_02 = split[1].trim();
+
+                    console.log("role_Message_Spy_Part_01:", role_Message_Spy_Part_01);         // Debugging log.   You are the SPY!
+                    console.log("role_Message_Spy_Part_02:", role_Message_Spy_Part_02);         // Debugging log.   Try to figure out the location / event.
+
+                    /*
+                     Dynamically generate two <p></p> HTML elements to accommodate the text of parts 01 and 02 of the the modal role message
+                      (viz. role_Message) for the Spy that was passed to this showModal() function, and append them to the above <div></div> HTML 
+                      modal element.
+                    */
+                    const your_Role_Message_Part_01 = document.createElement("p");
+                    your_Role_Message_Part_01.classList.add("role_Message_Spy_Part_01");
+                    your_Role_Message_Part_01.textContent = role_Message_Spy_Part_01;
+                    modal.appendChild(your_Role_Message_Part_01);
+                
+                    const your_Role_Message_Part_02 = document.createElement("p");
+                    your_Role_Message_Part_02.classList.add("role_Message_Spy_Part_02");
+                    your_Role_Message_Part_02.textContent = role_Message_Spy_Part_02;
+                    modal.appendChild(your_Role_Message_Part_02);
+
                 } else {
-                    //  The location is: Restaurant. Go find the spy!
-                    split = role_Message.split(".");
-                    console.log("split:", split);                       // Debugging log.
-                    index_Of_ExclamationMark = role_Message.indexOf(".");
-                    role_Message_Part_01 = role_Message.slice(0, index_Of_ExclamationMark+1);
-                    role_Message_Part_02 = split[1].trim();
-                   
+                    //  The location / event is: Restaurant. Go find the spy!
+                    let role_Message_nonSpy_Part_01 = "";
+                    let role_Message_nonSpy_Part_02 = "";
+                    let role_Message_nonSpy_Part_03 = "";
+
+                    split_01 = role_Message.split(":");
+                    console.log("split_01:", split_01);                                         // Debugging log.
+                    index_Of_Colon = role_Message.indexOf(":");
+                    role_Message_nonSpy_Part_01 = role_Message.slice(0, index_Of_Colon+1);
+                    split_02 = split_01[1].split(".");
+                    console.log("split_02", split_02);                                          // Debugging log.
+                    index_Of_Period = split_01[1].indexOf(".");
+                    role_Message_nonSpy_Part_02 = split_01[1].slice(0, index_Of_Period+1);
+                    role_Message_nonSpy_Part_03 = split_02[1].trim();
+
+                    console.log("role_Message_nonSpy_Part_01:", role_Message_nonSpy_Part_01);   // Debugging log.   The location / event is:
+                    console.log("role_Message_nonSpy_Part_02:", role_Message_nonSpy_Part_02);   // Debugging log.   Restaurant.
+                    console.log("role_Message_nonSpy_Part_03:", role_Message_nonSpy_Part_03);   // Debugging log.   Go find the spy!
+
+                    /*
+                     Dynamically generate three <p></p> HTML elements to accommodate the text of parts 01 to 03 of the the modal role message
+                     (viz. role_Message) for the non-Spythat was passed to this showModal() function, and append them to the above <div></div> 
+                     HTML modal element.
+                    */
+                    const your_Role_Message_Part_01 = document.createElement("p");
+                    your_Role_Message_Part_01.classList.add("role_Message_nonSpy_Part_01");
+                    your_Role_Message_Part_01.textContent = role_Message_nonSpy_Part_01;
+                    modal.appendChild(your_Role_Message_Part_01);
+                
+                    const your_Role_Message_Part_02 = document.createElement("p");
+                    your_Role_Message_Part_02.classList.add("role_Message_nonSpy_Part_02");
+                    your_Role_Message_Part_02.textContent = role_Message_nonSpy_Part_02;
+                    modal.appendChild(your_Role_Message_Part_02);
+
+                    const your_Role_Message_Part_03 = document.createElement("p");
+                    your_Role_Message_Part_03.classList.add("role_Message_nonSpy_Part_03");
+                    your_Role_Message_Part_03.textContent = role_Message_nonSpy_Part_03;
+                    modal.appendChild(your_Role_Message_Part_03);
+                                      
                 }
-                console.log("role_Message_Part_01:", role_Message_Part_01);                 // Debugging log.
-                console.log("role_Message_Part_02:", role_Message_Part_02);                 // Debugging log.
               
-                /*
-                 Dynamically generate two <p></p> HTML elements to accommodate the text of parts 01 and 02 of the the modal role message
-                  (viz. role_Message) that was passed to this showModal() function, and append them to the above <div></div> HTML modal
-                  element.
-                */
-                const your_Role_Message_Part_01 = document.createElement("p");
-                your_Role_Message_Part_01.classList.add("role_Message_Part_01");
-                your_Role_Message_Part_01.textContent = role_Message_Part_01;
-                modal.appendChild(your_Role_Message_Part_01);
-                
-                const your_Role_Message_Part_02 = document.createElement("p");
-                your_Role_Message_Part_02.classList.add("role_Message_Part_02");
-                your_Role_Message_Part_02.textContent = role_Message_Part_02;
-                modal.appendChild(your_Role_Message_Part_02);
-                
                 /*
                  Dynamically generate a <p></p> HTML element to accommodate a direction message to players that they should click the 'Close'
                   button before passing on to next player.  Assign this direction message a class of "direction" before appending it to the above
@@ -320,12 +356,12 @@
                 console.log("Spy: ", spy);                          // Debugging log to check for randomness.
                 
                 /*
-                 Randomly select a location from the locations array.
+                 Randomly select a location / event from the locations array.
                  So the following statement for n players (viz. locations.length = n), will return an index to the players array between 0 and locations.length-1.
                 */
                 //location = locations[Math.floor(Math.random() * locations.length)];
                 location = locations[Math.floor(Math.random() * locations.length)].name;
-                console.log("Location: ", location);                // Debugging log.
+                console.log("Location / Event: ", location);                // Debugging log.
         
                 document.getElementById("setup").style.display = "none";
                 document.getElementById("discover_Roles_or_Reveal_Spy_Container").style.display = "block";
@@ -339,7 +375,7 @@
                     2. Label the button with the player name.
                     3. Assign the button a class name of "playerRole_btn".
                     4. Get the clicking of the button to trigger an onclick event that will call the function below
-                        to launch an alert / modal.
+                        to in turn call the above showModal() function to format and launch an alert / modal.
                     5. Append the button element to the playerListDiv HTML element.
                 */
                 players.forEach(player => {
@@ -351,17 +387,17 @@
                     console.log(">>> Game is ready for playing!");                       // Debugging log.
                     
                     /* button.onclick = function() {
-                        alert(player === spy ? "You are the SPY! Try to figure out the location." 
-                                             : `The location is: ${location}. Find the spy!`);
+                        alert(player === spy ? "You are the SPY! Try to figure out the location / event." 
+                                             : `The location / event is: ${location}. Find the spy!`);
                         this.disabled = true;
                     };*/
                     /*
-                     Note that for the "The location is: ..." message, the ${location} variable won't render if this is enclosed
+                     Note that for the "The location / event is: ..." message, the ${location} variable won't render if this is enclosed
                      in regular quotes (viz "" or '') rather than ``.
                     */
                     button.onclick = function() {
-                        showModal(player === spy ? "You are the SPY!  Try to figure out the location."
-                                                 : `The location is: ${location}.  Go find the spy!`);
+                        showModal(player === spy ? "You are the SPY!  Try to figure out the location / event."
+                                                 : `The location / event is: ${location}.  Go find the spy!`);
                         this.disabled = true;
                     };
                     playerListDiv.appendChild(button);
